@@ -24,9 +24,11 @@ void Umbra::paintEvent(QPaintEvent*){
 }
 
 void Umbra::mousePressEvent(QMouseEvent *event){
+    undoStack.push(image);
+
     if(event->button() == Qt::LeftButton){
         QPainter painter(&image);
-        painter.setPen(QPen(Qt::white , 3 , Qt::SolidLine, Qt::RoundCap));
+        painter.setPen(QPen(Qt::white , brushSize , Qt::SolidLine, Qt::RoundCap));
         painter.drawPoint(event->pos());
         lastPoint = event->pos();
         update();
@@ -50,6 +52,11 @@ void Umbra::keyPressEvent(QKeyEvent *event){
         image.fill(Qt::transparent);
         update();
     }
+
+    else if((event->modifiers() && Qt::ControlModifier) && (event->key() == Qt::Key_Z)){
+        image = undoStack.pop();
+        update();
+    }
 }
 
 void Umbra::mouseMoveEvent(QMouseEvent *event){
@@ -57,7 +64,7 @@ void Umbra::mouseMoveEvent(QMouseEvent *event){
     if(event->buttons() & Qt::LeftButton){
         // -- line based implementation (much better) --
         QPainter painter(&image);
-        painter.setPen(QPen(Qt::white , 8 , Qt::SolidLine, Qt::RoundCap));
+        painter.setPen(QPen(Qt::white , brushSize , Qt::SolidLine, Qt::RoundCap));
         painter.drawLine(lastPoint , event->pos());
         lastPoint = event->pos();
         update();
@@ -117,6 +124,50 @@ void Umbra::mouseMoveEvent(QMouseEvent *event){
 
 }
 
+
+void Umbra::contextMenuEvent(QContextMenuEvent *event){
+
+    QMenu menu(this);
+
+    QSlider* slider = new QSlider(Qt::Horizontal);
+    slider->setRange(0,10);
+    slider->setValue(brushSize);
+    slider->setWhatsThis("ToolTip Size");
+    slider->setFixedWidth(120);
+    QWidgetAction *sliderAction = new QWidgetAction(&menu);
+    sliderAction->setDefaultWidget(slider);
+
+    QAction* clearAction = menu.addAction("Clear Canvas");
+    QAction* undoAction = menu.addAction("Undo");
+    QAction* exitAction = menu.addAction("Exit");
+    menu.addAction(sliderAction);
+
+
+    connect(slider, &QSlider::valueChanged, this , [=](int value){
+        brushSize = value;
+        qDebug() << "brush size value changed to" << brushSize;
+    });
+
+    // -- block state ---
+    QAction* selected = menu.exec(event->globalPos());
+
+    if(selected == clearAction){
+        image.fill(Qt::transparent);
+        update();
+    }
+
+    else if( selected == undoAction){
+        if(!undoStack.empty()){
+            image = undoStack.pop();
+            update();
+        }
+    }
+
+    else if( selected == exitAction){
+        this->close();
+    }
+
+}
 
 
 
