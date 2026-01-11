@@ -35,8 +35,9 @@ else()
     else()
         add_executable(Umbra
             ${PROJECT_SOURCES}
-            umbra.h umbra.cpp
-            icons.qrc
+            src/umbra.h
+            src/umbra.cpp
+            src/icons.qrc
         )
     endif()
 endif()

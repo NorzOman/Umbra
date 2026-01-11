@@ -1,6 +1,6 @@
 
 #include <QApplication>
-#include "umbra.h"
+#include "src/umbra.h"
 
 int main(int argc , char* argv[]){
     QApplication app(argc,argv);

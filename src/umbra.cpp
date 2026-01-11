@@ -3,8 +3,8 @@
 
 
 // -- macros for the icon stuffs --
-#define penIconPath    ":/icon/static/pen.png"
-#define eraserIconPath ":/icon/static/eraser.png"
+#define penIconPath    ":/icon/pen.png"
+#define eraserIconPath ":/icon/eraser.png"
 #define penX            0
 #define penY            32
 #define eraserX         12
