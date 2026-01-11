@@ -2,6 +2,9 @@
 #pragma once
 
 #include <QWidget>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QTimer>
 #include <QScreen>
 #include <QDebug>
 #include <QRect>
@@ -17,7 +20,8 @@
 #include <QSlider>
 #include <QWidgetAction>
 #include <QContextMenuEvent>
-
+#include <QCursor>
+#include <QColorDialog>
 
 // #include <cmath> <- not needed since no ellipse impleemntation
 
@@ -35,6 +39,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void contextMenuEvent(QContextMenuEvent *event) override;
+    void changeIcon();
 
 private:
     QImage image;
@@ -42,5 +47,9 @@ private:
     QRect rect;
     QPoint lastPoint;
     QStack<QImage> undoStack;
+    QColor color;
     int brushSize = 5;
+    int eraserSize = 10;
+    int type = 1;
+    bool hasIcon = true;
 };

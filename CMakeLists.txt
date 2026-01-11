@@ -14,8 +14,6 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         main.cpp
-
-
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -38,8 +36,7 @@ else()
         add_executable(Umbra
             ${PROJECT_SOURCES}
             umbra.h umbra.cpp
-
-
+            icons.qrc
         )
     endif()
 endif()
